@@ -1,8 +1,11 @@
-import 'package:flutter/cupertino.dart';
+
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/detector_provider.dart';
+import 'package:snapncook/providers/ingredient_list_provider.dart';
 import 'package:ultralytics_yolo/camera_preview/camera_preview.dart';
 import 'package:ultralytics_yolo/predict/detect/detect.dart';
 
@@ -18,6 +21,13 @@ class _DetectorViewState extends State<DetectorView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      /*extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text("Snap & Cook"),
+        centerTitle: true,
+      ),*/
+      floatingActionButton: FloatingActionButton.extended(onPressed: (){}, label: const Text("Ready to Cook?", style: TextStyle(fontWeight: FontWeight.bold),), backgroundColor: Colors.deepOrange.shade600, foregroundColor: Colors.black,),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Consumer<DetectorProvider>(
         builder: (context, detectorProvider, Widget? child) {
           return FutureBuilder<bool>(
@@ -35,53 +45,70 @@ class _DetectorViewState extends State<DetectorView> {
                 );
               }
 
-              return FutureBuilder<ObjectDetector>(
-                future: detectorProvider.initObjectDetectorWithLocalModel(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
+              return ChangeNotifierProvider<IngredientListProvider>(
+                create: (context) => IngredientListProvider(),
+                child: FutureBuilder<ObjectDetector>(
+                  future: detectorProvider.initObjectDetectorWithLocalModel(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                  if (snapshot.hasError) {
-                    //print(snapshot.error);
-                    return const Center(child: Text('Error loading model'));
-                  }
+                    if (snapshot.hasError) {
+                      //print(snapshot.error);
+                      return const Center(child: Text('Error loading model'));
+                    }
 
-                  final predictor = snapshot.data;
-                  if (predictor == null) {
-                    return const Center(child: Text('Model not loaded yet'));
-                  }
-                  return Stack(
-                    children: [
-                      UltralyticsYoloCameraPreview(
-                          predictor: predictor,
-                          controller: detectorProvider.controller,
-                          onCameraCreated: (){
-                            predictor.loadModel(useGpu: false);
+                    final predictor = snapshot.data;
+                    if (predictor == null) {
+                      return const Center(child: Text('Model not loaded yet'));
+                    }
+                    return Stack(
+                      children: [
+                        UltralyticsYoloCameraPreview(
+                            predictor: predictor,
+                            controller: detectorProvider.controller,
+                            onCameraCreated: () {
+                              predictor.loadModel(useGpu: true);
+                              predictor.setConfidenceThreshold(0.85);
+                              predictor.detectionResultStream.listen(
+                                (event) {
+                                  if (event != null && event.isNotEmpty) {
+                                    if (!context.read<IngredientListProvider>().ingredients.any((ingredient) => ingredient.label == event.last?.label)) {
+                                      context.read<IngredientListProvider>().addIngredient('${event.last?.label}', event.last!.confidence, event.last!.boundingBox);
+                                      print("nesne listeye eklendi: ${event.last?.label}");
+                                    }
+                                  }
+                                },
+                              );
+                            }),
+                        Consumer<IngredientListProvider>(
+                          builder: (BuildContext context, ingredientListProvider, Widget? child) {
+                            return ingredientListProvider.ingredients.isNotEmpty ? Padding(
+                              padding: EdgeInsets.fromLTRB(4.w, 10.h, 50.w, 6.h),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Ingredients", style: TextStyle(fontSize: 19.sp, color: Colors.grey.shade200, fontWeight: FontWeight.bold)),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      itemCount: ingredientListProvider.ingredients.length,
+                                      itemBuilder: (context, index) {
+                                        return Text(
+                                          "- ${ingredientListProvider.ingredients[index].label.toUpperCase()}", style: TextStyle(fontSize: 18.sp, color: Colors.deepOrange, fontWeight: FontWeight.bold),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ) : const SizedBox.shrink();
                           },
-                        ),
-                      /*StreamBuilder(stream: predictor.detectionResultStream, builder: (context, snapshot){
-                        //predictor.setConfidenceThreshold(0.7);
-                        final DetectedObject secondPredictor;
-                        if(snapshot.data != null){
-                         secondPredictor = snapshot.data!.last!;
-                        }else{return Text("error");}
-                        final Rect rect = Rect.fromLTRB(secondPredictor.boundingBox.left, secondPredictor.boundingBox.top, secondPredictor.boundingBox.right, secondPredictor.boundingBox.bottom);
-                        return CustomPaint(
-                          size: Size(rect.left-rect.right, rect.top-rect.bottom),
-                          painter: MyPainter(rect),
-                        );
-                                          /*return Column(
-                                            children: [
-                                              Text("${snapshot.data?.first?.label}", style: TextStyle(color: Colors.red, fontSize: 16),),
-                                              Text("${snapshot.data?.first?.confidence}", style: TextStyle(color: Colors.black, fontSize: 12),),
-                                              Text("${snapshot.data?.first?.boundingBox.}", style: TextStyle(color: Colors.blue, fontSize: 12),),
-                                            ],
-                                          );*/
-                                        })*/
-                    ],
-                  );
-                },
+                        )
+                      ],
+                    );
+                  },
+                ),
               );
             },
           );
@@ -90,25 +117,3 @@ class _DetectorViewState extends State<DetectorView> {
     );
   }
 }
-
-/*class MyPainter extends CustomPainter {
-  MyPainter(this.rect);
-
-  final Rect rect;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.blue // Color of the box
-      ..style = PaintingStyle.stroke // Stroke style
-      ..strokeWidth = 2.0; // Stroke width
-
-    // Draw the box on the canvas
-    canvas.drawRect(rect, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}*/

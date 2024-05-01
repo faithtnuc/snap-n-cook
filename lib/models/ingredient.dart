@@ -1,6 +1,14 @@
+import 'dart:ui';
+
 class Ingredient {
-  final String name;
+  final String label;
   final double confidence;
-  
-  const Ingredient(this.name, this.confidence);
+  final Rect boundingBox;
+
+  const Ingredient(this.label, this.confidence, this.boundingBox);
+
+  @override
+  String toString() {
+    return 'Ingredient{label: $label, confidence: $confidence, boundingBox: $boundingBox}';
+  }
 }

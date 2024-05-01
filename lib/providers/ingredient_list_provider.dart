@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 
 import '../models/ingredient.dart';
@@ -7,8 +9,8 @@ class IngredientListProvider extends ChangeNotifier {
 
   List<Ingredient> get ingredients => _ingredients;
 
-  void addIngredient(String name, double confidence) {
-    _ingredients.add(Ingredient(name, confidence));
+  void addIngredient(String name, double confidence, Rect boundingBox) {
+    _ingredients.add(Ingredient(name, confidence, boundingBox));
     notifyListeners(); // Notify listeners about the change
   }
 
@@ -21,4 +23,5 @@ class IngredientListProvider extends ChangeNotifier {
     _ingredients.clear();
     notifyListeners();
   }
+
 }
