@@ -5,6 +5,8 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/detector_provider.dart';
 import 'package:snapncook/views/detector_view.dart';
 
+import 'providers/ingredient_list_provider.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -16,10 +18,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<DetectorProvider>(
-      create: (context) => DetectorProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<DetectorProvider>(
+          create: (context) => DetectorProvider(),
+        ),
+        ChangeNotifierProvider<IngredientListProvider>(
+          create: (context) => IngredientListProvider(),
+        )
+      ],
       child: ResponsiveSizer(
-        builder: (context, orientation , screenType) {
+        builder: (context, orientation, screenType) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
@@ -34,4 +43,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
