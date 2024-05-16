@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:snapncook/services/db_service.dart';
 
 import '../models/ingredient.dart';
 
 class IngredientListProvider extends ChangeNotifier {
-  final List<Ingredient> _ingredients = [];
+  DbService dbService = DbService();
+  final List<Ingredient> _ingredients = [Ingredient("Biber", 100, Rect.zero)];
 
   List<Ingredient> get ingredients => _ingredients;
 
@@ -22,6 +24,10 @@ class IngredientListProvider extends ChangeNotifier {
   void clearIngredients() {
     _ingredients.clear();
     notifyListeners();
+  }
+
+  Future<List<Ingredient>> getIngredientsFromFirestore() async {
+    return await dbService.getIngredientsFromFirestore();
   }
 
 }
