@@ -59,7 +59,7 @@ class DetectorView extends StatelessWidget {
                             predictor.detectionResultStream.listen(
                               (event) {
                                 if (event != null && event.isNotEmpty) {
-                                  if (!context.read<IngredientListProvider>().ingredients.any((ingredient) => ingredient.label == event.last?.label)) {
+                                  if (!context.read<IngredientListProvider>().myIngredients.any((ingredient) => ingredient.label == event.last?.label)) {
                                     context.read<IngredientListProvider>().addIngredient('${event.last?.label}', event.last!.confidence, event.last!.boundingBox);
                                   }
                                 }
@@ -68,7 +68,7 @@ class DetectorView extends StatelessWidget {
                           }),
                       Consumer<IngredientListProvider>(
                         builder: (BuildContext context, ingredientListProvider, Widget? child) {
-                          return ingredientListProvider.ingredients.isNotEmpty ? Padding(
+                          return ingredientListProvider.myIngredients.isNotEmpty ? Padding(
                             padding: EdgeInsets.fromLTRB(4.w, 10.h, 50.w, 6.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,10 +76,10 @@ class DetectorView extends StatelessWidget {
                                 Text("Ingredients", style: TextStyle(fontSize: 19.sp, color: Colors.grey.shade200, fontWeight: FontWeight.bold)),
                                 Expanded(
                                   child: ListView.builder(
-                                    itemCount: ingredientListProvider.ingredients.length,
+                                    itemCount: ingredientListProvider.myIngredients.length,
                                     itemBuilder: (context, index) {
                                       return Text(
-                                        "- ${ingredientListProvider.ingredients[index].label.toUpperCase()}", style: TextStyle(fontSize: 18.sp, color: Colors.deepOrange, fontWeight: FontWeight.bold),
+                                        "- ${ingredientListProvider.myIngredients[index].label.toUpperCase()}", style: TextStyle(fontSize: 18.sp, color: Colors.deepOrange, fontWeight: FontWeight.bold),
                                       );
                                     },
                                   ),
