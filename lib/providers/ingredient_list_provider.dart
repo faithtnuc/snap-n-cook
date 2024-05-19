@@ -23,6 +23,8 @@ class IngredientListProvider extends ChangeNotifier {
 
   void removeIngredient(Ingredient ingredient) {
     _myIngredients.remove(ingredient);
+    _allIngredients.add(ingredient);
+    _allIngredients.sort((a,b) => a.label.compareTo(b.label)); //Sort all ingredients list alphabetically by label.
     notifyListeners();
   }
 
@@ -37,6 +39,7 @@ class IngredientListProvider extends ChangeNotifier {
     }
     try{
       _allIngredients = await dbService.getIngredientsFromFirestore();
+      _allIngredients.removeWhere((ingredient)=> _myIngredients.any((myIngredient) => myIngredient.label == ingredient.label)); //Removing my ingredients from all Ingredients list.
       return _allIngredients;
     }catch(e){
       throw Exception(e);
@@ -47,6 +50,9 @@ class IngredientListProvider extends ChangeNotifier {
 
   void addSelectedIngredientsToMyIngredients(){
     _myIngredients.addAll(_selectedIngredients);
+    _myIngredients.sort((a,b) => a.label.compareTo(b.label)); //Sort my ingredients list alphabetically by label.
+    _allIngredients.removeWhere((ingredient)=> _selectedIngredients.any((selectedIngredient) => selectedIngredient.label == ingredient.label)); //Remove selected ingredients from all Ingredients list.
+    _selectedIngredients.clear(); //Clear selected Ingredients.
     notifyListeners();
   }
 

@@ -42,13 +42,13 @@ class DetectedIngredientsView extends StatelessWidget {
             )
                 : const Center(
                 child: Text(
-                  "Bu silah boş",
+                  "Liste boş",
                   style: TextStyle(fontSize: 50),
                 )),
           ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.arrow_forward),
-            onPressed: () {},
+            onPressed: ()=> showIngredientSelectionDialog(context),
           ),
         ));
   }
@@ -78,21 +78,23 @@ class DetectedIngredientsView extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListView.builder(
-                shrinkWrap: true, // Prevent dialog from expanding excessively
-                itemCount: availableIngredients.length,
-                itemBuilder: (context, index) {
-                  final ingredient = availableIngredients[index];
-                  return Material(
-                    child: CheckboxListTile(
-                      title: Text(availableIngredients[index].label),
-                      value: ingredientListProvider.isIngredientSelected(ingredient),
-                      onChanged: (val) {
-                        context.read<IngredientListProvider>().toggleIngredientSelection(ingredient);
-                      },
-                    ),
-                  );
-                },
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true, // Prevent dialog from expanding excessively
+                  itemCount: availableIngredients.length,
+                  itemBuilder: (context, index) {
+                    final ingredient = availableIngredients[index];
+                    return Material(
+                      child: CheckboxListTile(
+                        title: Text(availableIngredients[index].label),
+                        value: ingredientListProvider.isIngredientSelected(ingredient),
+                        onChanged: (val) {
+                          context.read<IngredientListProvider>().toggleIngredientSelection(ingredient);
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
               Padding(
                 padding: EdgeInsets.all(10.sp),
