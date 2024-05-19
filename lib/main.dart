@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/detector_provider.dart';
-import 'package:snapncook/views/detected_ingredients_view.dart';
+import 'package:snapncook/views/detector_view.dart';
 
 import 'firebase_options.dart';
 import 'providers/ingredient_list_provider.dart';
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
               colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               useMaterial3: true,
             ),
-            home: const DetectedIngredientsView(),
+            home: const DetectorView(),
           );
         },
       ),
