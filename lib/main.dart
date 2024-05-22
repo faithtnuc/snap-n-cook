@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/detector_provider.dart';
-import 'package:snapncook/views/detected_ingredients_view.dart';
 import 'package:snapncook/views/detector_view.dart';
 
 import 'firebase_options.dart';
@@ -25,12 +24,10 @@ Future<void> main() async {
   } on FirebaseAuthException catch (e) {
     switch (e.code) {
       case "operation-not-allowed":
-        //print("Anonymous auth hasn't been enabled for this project.");
-        throw Exception("Anonymous auth hasn't been enabled for this project.");
+        debugPrint("Anonymous auth hasn't been enabled for this project.");
         break;
       default:
-        //print("Unknown error.");
-        throw Exception("Unknown error");
+        debugPrint("Unknown error.");
     }
   }
 
