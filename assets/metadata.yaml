@@ -11,9 +11,9 @@ imgsz:
 - 320
 - 320
 names:
-  0: bell-pepper
-  1: carrot
-  2: egg
-  3: garlic
-  4: onion
-  5: tomato
+  0: Dolmalık Biber
+  1: Havuç
+  2: Yumurta
+  3: Sarımsak
+  4: Soğan
+  5: Domates

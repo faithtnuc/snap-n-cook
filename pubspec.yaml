@@ -43,6 +43,7 @@ dependencies:
   responsive_sizer: ^3.3.1
   firebase_core: ^2.31.0
   cloud_firestore: ^4.17.3
+  firebase_auth: ^4.19.6
   modal_bottom_sheet: ^3.0.0
 
 dev_dependencies:

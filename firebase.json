@@ -1,1 +1,42 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"snap-n-cook-2c3b7","appId":"1:443745885440:android:40e4b479599d357355a7e5","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"snap-n-cook-2c3b7","configurations":{"android":"1:443745885440:android:40e4b479599d357355a7e5","ios":"1:443745885440:ios:6479d0af7fd4256855a7e5"}}}}}}
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "snap-n-cook-2c3b7",
+          "appId": "1:443745885440:android:40e4b479599d357355a7e5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "snap-n-cook-2c3b7",
+          "configurations": {
+            "android": "1:443745885440:android:40e4b479599d357355a7e5",
+            "ios": "1:443745885440:ios:6479d0af7fd4256855a7e5"
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"%RESOURCE_DIR%\" run lint"
+      ]
+    }
+  ]
+}
