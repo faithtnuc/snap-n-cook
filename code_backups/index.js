@@ -17,7 +17,7 @@ admin.initializeApp();
  * @param {Object} context - The function execution context.
  * @returns {Promise<Array>} - An array of matching recipes with details and match percentages.
  */
-exports.findMatchingRecipes = onCall((data, context) => {
+exports.findrecommendedRecipes = onCall((data, context) => {
   // 1. Get user-selected ingredients
   const myIngredients = data.data.ingredients;
 
@@ -26,11 +26,11 @@ exports.findMatchingRecipes = onCall((data, context) => {
 
   // 3. Query recipes collection
   return db.collection("recipes")
-      // .limit(10) // Fetch only the first 10 recipes
+      .limit(10) // Fetch only the first 20 recipes
       .get()
       .then((snapshot) => {
         // 4. Process each recipe document
-        const matchingRecipes = [];
+        const recommendedRecipes = [];
         snapshot.forEach((doc) => {
           const recipe = doc.data();
           const recipeIngredients = Array.from(new Set(recipe.ingredients.map((item) =>
@@ -52,28 +52,30 @@ exports.findMatchingRecipes = onCall((data, context) => {
             "ingredients": recipe.ingredients,
           };
 
-          matchingRecipes.push(recipeMap);
+          recommendedRecipes.push(recipeMap);
         });
 
         // 7. Sort recipes by match percentage (descending)
-        matchingRecipes.sort((a, b) => b.matchPercentage - a.matchPercentage);
+        recommendedRecipes.sort((a, b) => b.matchPercentage - a.matchPercentage);
 
         // 8. Filter and limit results based on match percentage
-        const filteredRecipes = matchingRecipes.filter(
+        const filteredRecipes = recommendedRecipes.filter(
             (recipe) => recipe.matchPercentage >= 70,
         );
 
-        const recommendedRecipes = [];
 
-        if (filteredRecipes.length>=10) {
-          recommendedRecipes.push(...filteredRecipes);
+
+        const topRecipes = filteredRecipes.slice(
+            0,
+            Math.min(filteredRecipes.length, 10),
+        ); // Top 10 or less with at least 70% match
+        console.log(topRecipes);
+
+        if (filteredRecipes.length>10) {
+          return filteredRecipes;
         } else {
-          recommendedRecipes.push(...matchingRecipes.filter(
-              (recipe) => recipe.matchPercentage > 50,
-          ).splice(0, 10));
+          return {recommendedRecipes: recommendedRecipes};
         }
-
-        return {recommendedRecipes: recommendedRecipes};
       });
 });
 

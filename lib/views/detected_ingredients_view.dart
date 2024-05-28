@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:snapncook/providers/recommended_recipes_provider.dart';
+import 'package:snapncook/views/recommended_recipes_view.dart';
 import '../models/ingredient.dart';
 import '../providers/ingredient_list_provider.dart';
 import '../widgets/ingredient_list_item.dart';
@@ -40,15 +42,23 @@ class DetectedIngredientsView extends StatelessWidget {
                 }
               },
             )
-                : const Center(
-                child: Text(
-                  "Liste boş",
-                  style: TextStyle(fontSize: 50),
-                )),
+                :
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    textAlign: TextAlign.center,
+                    "Liste boş",
+                    style: TextStyle(fontSize: 50),
+                  ),
+                  TextButton(onPressed: () => showIngredientSelectionDialog(context), child: const Text("Malzeme Ekle"),)
+                ],
+              ),
           ),
           floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.arrow_forward),
-            onPressed: ()=> showIngredientSelectionDialog(context),
+            onPressed: ()=> goToRecommendedRecipesView(context),
           ),
         ));
   }
@@ -109,5 +119,15 @@ class DetectedIngredientsView extends StatelessWidget {
       },
     )
     );
+  }
+
+  goToRecommendedRecipesView(context) {
+    Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => ChangeNotifierProvider(
+              create: (context) => RecommendedRecipesProvider(),
+              child: RecommendedRecipesView(context.read<IngredientListProvider>().myIngredients),
+            )),
+            );
   }
 }
