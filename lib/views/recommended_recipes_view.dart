@@ -38,7 +38,7 @@ class RecommendedRecipesView extends StatelessWidget {
         }
 
         if(recommendedRecipes.isEmpty){
-          return const Center(child: Text("Elinizdeki malzemelerle bir halt yapılmaz"),);
+          return const Center(child: Text("Elinizdeki malzemelere uygun yemek tarifi bulunamadı"),);
         }
         return ListView.builder(
           itemCount: recommendedRecipes.length, itemBuilder: (BuildContext context, int index) {
