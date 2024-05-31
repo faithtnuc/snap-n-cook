@@ -139,8 +139,8 @@ class DetectorView extends StatelessWidget {
                       Consumer<IngredientListProvider>(
                         builder: (BuildContext context, ingredientListProvider,
                             Widget? child) {
-                          return SafeArea(
-                            child: ingredientListProvider.myIngredients.isNotEmpty ? Container(
+                          return ingredientListProvider.myIngredients.isNotEmpty ? SafeArea(
+                            child: Container(
                               margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
                               padding: EdgeInsets.all(14.sp),
                               decoration: BoxDecoration(
@@ -154,7 +154,7 @@ class DetectorView extends StatelessWidget {
                                 children: [
                                   Text('ALGILANAN MALZEMELER',
                                     style: TextStyle(color: Colors.orange.shade300, fontSize: 14.sp, fontWeight: FontWeight.bold),),
-                                  Divider(height: 0.6.h, thickness: 0.6, color: Colors.black87,),
+                                  Divider(height: 0.8.h, thickness: 0.6, color: Colors.grey.shade600,),
                                   Expanded(
                                     child: SingleChildScrollView(
                                       controller: ingredientListProvider.scrollController,
@@ -163,6 +163,7 @@ class DetectorView extends StatelessWidget {
                                         runSpacing: 0.6.h,
                                         children: ingredientListProvider.myIngredients.map((ingredient){
                                           return Container(
+                                            margin: EdgeInsets.only(top: 0.2.h),
                                             padding: EdgeInsets.symmetric(vertical: 4.sp, horizontal: 10.sp),
                                             decoration: BoxDecoration(
                                                 color: Colors.black45,
@@ -177,8 +178,8 @@ class DetectorView extends StatelessWidget {
                                   )
                                 ],
                               ),
-                            ) : const SizedBox.shrink(),
-                          );
+                            ),
+                          ) : const SizedBox.shrink();
                         },
                       ),
                       Center(

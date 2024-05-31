@@ -26,7 +26,7 @@ exports.findMatchingRecipes = onCall((data, context) => {
 
   // 3. Query recipes collection
   return db.collection("recipes")
-      .limit(50) // Fetch only the first 10 recipes (For testing only)
+      .limit(50) // Fetch only the first 50 recipes (For testing only)
       .get()
       .then((snapshot) => {
         // 4. Process each recipe document
