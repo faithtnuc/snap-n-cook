@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -17,12 +20,18 @@ class DetectorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      /*extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.close, color: Colors.white, size: 20.6.sp,)),
-      ),
+        leading: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.close,
+              color: Colors.white,
+              size: 20.6.sp,
+            )),
+      ),*/
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -32,16 +41,37 @@ class DetectorView extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.black45,
                 border: Border.all(color: Colors.grey.shade600, width: 0.6),
-                borderRadius: const BorderRadius.all(Radius.circular(20))
+                borderRadius: const BorderRadius.all(Radius.circular(20))),
+            child: const Text(
+              "Malzeme listenize ekleme çıkarma işlemlerinizi bir sonraki sayfada yapabilirsiniz",
+              style: TextStyle(color: Colors.white),
             ),
-            child: const Text("Malzemelerinize sonraki sayfada ekleme çıkarma yapabilirsiniz", style: TextStyle(color: Colors.white),),
           ),
-          SizedBox(height: 4.h,),
-          FloatingActionButton(shape: RoundedRectangleBorder(side: BorderSide(width: 8.sp,color: Colors.white),borderRadius: BorderRadius.circular(20)),onPressed: ()=> Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=> const DetectedIngredientsView()), (route) => false), backgroundColor: Colors.black.withAlpha(60), foregroundColor: Colors.white, child: Icon(size: 24.sp, Icons.check_rounded, shadows: const [Shadow(
-            blurRadius: 20.0,
-            color: Colors.white,
-            offset: Offset(0, 0),
-          ),],),),
+          SizedBox(
+            height: 4.h,
+          ),
+          FloatingActionButton(
+            shape: RoundedRectangleBorder(
+                side: BorderSide(width: 8.sp, color: Colors.white),
+                borderRadius: BorderRadius.circular(20)),
+            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => const DetectedIngredientsView()),
+                (route) => false),
+            backgroundColor: Colors.black.withAlpha(60),
+            foregroundColor: Colors.white,
+            child: Icon(
+              size: 24.sp,
+              Icons.check_rounded,
+              shadows: const [
+                Shadow(
+                  blurRadius: 20.0,
+                  color: Colors.white,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -89,34 +119,66 @@ class DetectorView extends StatelessWidget {
                             predictor.detectionResultStream.listen(
                               (event) {
                                 if (event != null && event.isNotEmpty) {
-                                  if (!context.read<IngredientListProvider>().myIngredients.any((ingredient) => ingredient.label == event.last?.label)) {
-                                    context.read<IngredientListProvider>().addIngredient('${event.last?.label}', event.last!.confidence, event.last!.boundingBox);
+                                  if (!context
+                                      .read<IngredientListProvider>()
+                                      .myIngredients
+                                      .any((ingredient) =>
+                                          ingredient.label ==
+                                          event.last?.label)) {
+                                    context
+                                        .read<IngredientListProvider>()
+                                        .addIngredient(
+                                            '${event.last?.label}',
+                                            event.last!.confidence,
+                                            event.last!.boundingBox);
                                   }
                                 }
                               },
                             );
                           }),
                       Consumer<IngredientListProvider>(
-                        builder: (BuildContext context, ingredientListProvider, Widget? child) {
-                          return ingredientListProvider.myIngredients.isNotEmpty ? Padding(
-                            padding: EdgeInsets.fromLTRB(4.w, 10.h, 50.w, 6.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Ingredients", style: TextStyle(fontSize: 19.sp, color: Colors.grey.shade200, fontWeight: FontWeight.bold)),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: ingredientListProvider.myIngredients.length,
-                                    itemBuilder: (context, index) {
-                                      return Text(
-                                        "- ${ingredientListProvider.myIngredients[index].label.toUpperCase()}", style: TextStyle(fontSize: 18.sp, color: Colors.deepOrange, fontWeight: FontWeight.bold),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ) : const SizedBox.shrink();
+                        builder: (BuildContext context, ingredientListProvider,
+                            Widget? child) {
+                          return SafeArea(
+                            child: ingredientListProvider.myIngredients.isNotEmpty ? Container(
+                              margin: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                              padding: EdgeInsets.all(14.sp),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey.shade600, width: 0.6),
+                                  borderRadius: BorderRadius.circular(20)),
+                              width: 80.w,
+                              height: 16.h,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('ALGILANAN MALZEMELER',
+                                    style: TextStyle(color: Colors.orange.shade300, fontSize: 14.sp, fontWeight: FontWeight.bold),),
+                                  Divider(height: 0.6.h, thickness: 0.6, color: Colors.black87,),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      controller: ingredientListProvider.scrollController,
+                                      child: Wrap(
+                                        spacing: 0.8.w,
+                                        runSpacing: 0.6.h,
+                                        children: ingredientListProvider.myIngredients.map((ingredient){
+                                          return Container(
+                                            padding: EdgeInsets.symmetric(vertical: 4.sp, horizontal: 10.sp),
+                                            decoration: BoxDecoration(
+                                                color: Colors.black45,
+                                                border: Border.all(color: Colors.grey.shade600, width: 0.6),
+                                                borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Text(ingredient.label, style: const TextStyle(color: Colors.white),),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ) : const SizedBox.shrink(),
+                          );
                         },
                       ),
                       Center(

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:snapncook/services/db_service.dart';
 
 import '../models/ingredient.dart';
@@ -13,11 +14,13 @@ class IngredientListProvider extends ChangeNotifier {
 
   List<Ingredient> get myIngredients => _myIngredients;
   List<Ingredient> get allIngredients => _allIngredients;
+  final ScrollController scrollController = ScrollController();
 
 
 
   void addIngredient(String name, double confidence, Rect boundingBox) {
     _myIngredients.add(Ingredient(name, confidence, boundingBox));
+    scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
     notifyListeners(); // Notify listeners about the change
   }
 
