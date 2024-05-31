@@ -21,7 +21,7 @@ class IngredientListProvider extends ChangeNotifier {
   void addIngredient(String name, double confidence, Rect boundingBox) {
     _myIngredients.add(Ingredient(name, confidence, boundingBox));
     scrollController.animateTo(scrollController.position.maxScrollExtent, duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
-    notifyListeners(); // Notify listeners about the change
+    notifyListeners();
   }
 
   void removeIngredient(Ingredient ingredient) {

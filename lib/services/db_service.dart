@@ -16,7 +16,6 @@ class DbService{
     );
     final results = await callable.call(<String, dynamic>{
       'ingredients': ingredientLabels,
-      // Pass only ingredient labels as a list of strings
     });
 
     return results;
