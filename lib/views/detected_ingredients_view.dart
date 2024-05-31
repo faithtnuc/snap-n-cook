@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/recommended_recipes_provider.dart';
+import 'package:snapncook/utils/constants.dart';
 import 'package:snapncook/views/recommended_recipes_view.dart';
 import '../models/ingredient.dart';
 import '../providers/ingredient_list_provider.dart';
@@ -16,8 +18,10 @@ class DetectedIngredientsView extends StatelessWidget {
     return PopScope(
         canPop: false,
         child: Scaffold(
+          backgroundColor: kBackgroundColor,
           appBar: AppBar(
-            title: const Text('Ingredients'),
+            backgroundColor: kBackgroundColor,
+            title: const Text('Malzemelerim', style: kAppBarTitleStyle),
           ),
           body: Consumer<IngredientListProvider>(
             builder: (context, ingredientListProvider, child) =>
@@ -45,21 +49,29 @@ class DetectedIngredientsView extends StatelessWidget {
                 :
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    textAlign: TextAlign.center,
-                    "Liste boş",
-                    style: TextStyle(fontSize: 50),
+                  SvgPicture.asset(
+                      width: 20.w,
+                      height: 24.h,
+                      assetName,
+                      semanticsLabel: 'Empty Fridge'
                   ),
-                  TextButton(onPressed: () => showIngredientSelectionDialog(context), child: const Text("Malzeme Ekle"),)
+                  Padding(
+                    padding: EdgeInsets.only(top: 2.h, left: 12.w, right: 12.w, bottom: 0.8.h),
+                    child: Text(
+                      textAlign: TextAlign.center,
+                      "Malzeme listeniz boş. Eklemek için aşağıdaki butona tıklayınız",
+                      style: kPrimaryTextStyle,
+                    ),
+                  ),
+                  GestureDetector(onTap: () => showIngredientSelectionDialog(context),child: Container(padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),decoration: kEmptyListBoxDecoration, child: const Text("Malzeme Ekle"),))
                 ],
               ),
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: context.read<IngredientListProvider>().myIngredients.isNotEmpty ? FloatingActionButton(
             child: const Icon(Icons.arrow_forward),
             onPressed: ()=> goToRecommendedRecipesView(context),
-          ),
+          ) : const SizedBox.shrink(),
         ));
   }
 
