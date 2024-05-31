@@ -68,7 +68,7 @@ class DetectedIngredientsView extends StatelessWidget {
                 ],
               ),
           ),
-          floatingActionButton: context.read<IngredientListProvider>().myIngredients.isNotEmpty ? FloatingActionButton(
+          floatingActionButton: context.watch<IngredientListProvider>().myIngredients.isNotEmpty ? FloatingActionButton(
             child: const Icon(Icons.arrow_forward),
             onPressed: ()=> goToRecommendedRecipesView(context),
           ) : const SizedBox.shrink(),
