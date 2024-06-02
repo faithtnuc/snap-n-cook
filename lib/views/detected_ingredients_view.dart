@@ -26,53 +26,60 @@ class DetectedIngredientsView extends StatelessWidget {
           body: Consumer<IngredientListProvider>(
             builder: (context, ingredientListProvider, child) =>
             ingredientListProvider.myIngredients.isNotEmpty
-                ? ListView.builder(
-              itemCount:
-              ingredientListProvider.myIngredients.length + 1,
-              itemBuilder: (context, index) {
-                if (index ==
-                    ingredientListProvider.myIngredients.length &&
-                    ingredientListProvider.myIngredients.isNotEmpty) {
-                  return TextButton(
-                      onPressed: () =>
-                          showIngredientSelectionDialog(context),
-                      child: const Text("Add Ingredient"));
-                } else {
-                  return IngredientListItem(
-                    ingredient:
-                    ingredientListProvider.myIngredients[index],
-                    index: index,
-                  );
-                }
-              },
-            )
-                :
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(
-                      width: 20.w,
-                      height: 24.h,
-                      assetName,
-                      semanticsLabel: 'Empty Fridge'
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 2.h, left: 12.w, right: 12.w, bottom: 0.8.h),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      "Malzeme listeniz boş. Eklemek için aşağıdaki butona tıklayınız",
-                      style: kPrimaryTextStyle,
-                    ),
-                  ),
-                  GestureDetector(onTap: () => showIngredientSelectionDialog(context),child: Container(padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),decoration: kEmptyListBoxDecoration, child: const Text("Malzeme Ekle"),))
-                ],
-              ),
+                ? buildIngredientsListView(ingredientListProvider)
+                : buildEmptyListView(context)
           ),
           floatingActionButton: context.watch<IngredientListProvider>().myIngredients.isNotEmpty ? FloatingActionButton(
             child: const Icon(Icons.arrow_forward),
             onPressed: ()=> goToRecommendedRecipesView(context),
           ) : const SizedBox.shrink(),
         ));
+  }
+
+  ListView buildIngredientsListView(IngredientListProvider ingredientListProvider) {
+    return ListView.builder(
+            itemCount:
+            ingredientListProvider.myIngredients.length + 1,
+            itemBuilder: (context, index) {
+              if (index ==
+                  ingredientListProvider.myIngredients.length &&
+                  ingredientListProvider.myIngredients.isNotEmpty) {
+                return TextButton(
+                    onPressed: () =>
+                        showIngredientSelectionDialog(context),
+                    child: const Text("Add Ingredient"));
+              } else {
+                return IngredientListItem(
+                  ingredient:
+                  ingredientListProvider.myIngredients[index],
+                  index: index,
+                );
+              }
+            },
+          );
+  }
+
+  Column buildEmptyListView(BuildContext context) {
+    return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                  width: 20.w,
+                  height: 24.h,
+                  assetName,
+                  semanticsLabel: 'Empty Fridge'
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 2.h, left: 12.w, right: 12.w, bottom: 0.8.h),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  "Malzeme listeniz boş. Eklemek için aşağıdaki butona tıklayınız",
+                  style: kPrimaryTextStyle,
+                ),
+              ),
+              GestureDetector(onTap: () => showIngredientSelectionDialog(context),child: Container(padding: EdgeInsets.symmetric(horizontal: 8.sp, vertical: 4.sp),decoration: kEmptyListBoxDecoration, child: const Text("Malzeme Ekle"),))
+            ],
+          );
   }
 
   void showIngredientSelectionDialog(BuildContext context) async {
@@ -133,7 +140,7 @@ class DetectedIngredientsView extends StatelessWidget {
     );
   }
 
-  goToRecommendedRecipesView(context) {
+  void goToRecommendedRecipesView(context) {
     Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => ChangeNotifierProvider(
