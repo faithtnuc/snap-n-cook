@@ -26,7 +26,9 @@ class IngredientListProvider extends ChangeNotifier {
 
   void removeIngredient(Ingredient ingredient) {
     _myIngredients.remove(ingredient);
-    _allIngredients.add(ingredient);
+    if(_allIngredients.isNotEmpty){
+      _allIngredients.add(ingredient);
+    }
     _allIngredients.sort((a,b) => a.label.compareTo(b.label)); //Sort all ingredients list alphabetically by label.
     notifyListeners();
   }
