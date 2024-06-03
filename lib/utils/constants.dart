@@ -39,3 +39,6 @@ final kRecipeDetailTitleTextStyle = TextStyle(color: kOrangeColor);
 final kRecipeDetailContainerTitleTextStyle = TextStyle(color: kOrangeColor, fontSize: 18.sp, fontWeight: FontWeight.bold);
 final kRecipeDetailContainerSubtitleTextStyle = TextStyle(color: Colors.grey.shade400, fontSize: 14.sp);
 final kVerticalDivider = VerticalDivider(color: Colors.grey.shade700, thickness: 0.4, width: 0.2, indent: 2.h, endIndent: 2.h,);
+final kInstructionsLeadingTextStyle = TextStyle(color: kPrimaryTextColor.withOpacity(0.8), fontSize: 14.4.sp);
+final kInstructionsTextStyle = TextStyle(fontSize: 16.sp, color: kPrimaryTextColor.withOpacity(0.8));
+final kInstructionsTitleTextStyle = TextStyle(color: kOrangeColor, fontSize: 18.sp, fontWeight: FontWeight.bold);
