@@ -36,3 +36,6 @@ final kTileTrailingSecondaryTextStyle = TextStyle(color: kOrangeColor, fontSize:
 
 //recipe detail view
 final kRecipeDetailTitleTextStyle = TextStyle(color: kOrangeColor);
+final kRecipeDetailContainerTitleTextStyle = TextStyle(color: kOrangeColor, fontSize: 18.sp, fontWeight: FontWeight.bold);
+final kRecipeDetailContainerSubtitleTextStyle = TextStyle(color: Colors.grey.shade400, fontSize: 14.sp);
+final kVerticalDivider = VerticalDivider(color: Colors.grey.shade700, thickness: 0.4, width: 0.2, indent: 2.h, endIndent: 2.h,);
