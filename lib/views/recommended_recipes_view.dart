@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/models/ingredient.dart';
 import 'package:snapncook/providers/recommended_recipes_provider.dart';
+import 'package:snapncook/utils/constants.dart';
 import 'package:snapncook/views/recipe_detail_view.dart';
+import 'package:snapncook/widgets/recommended_recipes_view/error_view.dart';
 
 import '../models/recipe.dart';
 
@@ -15,21 +17,23 @@ class RecommendedRecipesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       appBar: AppBar(
-        leading: BackButton(onPressed: ()=> Navigator.pop(context)),
-        title: const Text("Size Özel Tarifler"),
+        backgroundColor: kBackgroundColor,
+        leading: BackButton(onPressed: ()=> Navigator.pop(context), color: kOrangeColor,),
+        title: Text("Size Özel Tarifler", style: kPrimaryAppBarTextStyle),
         centerTitle: true,
       ),
       body: Consumer<RecommendedRecipesProvider>(builder: (BuildContext context, RecommendedRecipesProvider recommendedRecipesProvider, Widget? child) {
       return FutureBuilder(future: recommendedRecipesProvider.fetchRecommendedRecipes(myIngredients), builder: (context, snapshot){
 
         if (snapshot.connectionState == ConnectionState.waiting){
-        return Center(child: SizedBox(height: 2.6.h, width: 2.6.h,child: const CircularProgressIndicator()));
+        return Center(child: kProgressIcon);
         }
 
         if (snapshot.hasError) {
         //print(snapshot.error);
-        return const Center(child: Text('Error getting ingredient list'));
+        return const ErrorView("Tarifler getirilirken hata oluştu");
         }
 
         List<Recipe> recommendedRecipes = [];
@@ -38,21 +42,31 @@ class RecommendedRecipesView extends StatelessWidget {
         }
 
         if(recommendedRecipes.isEmpty){
-          return const Center(child: Text("Elinizdeki malzemelere uygun yemek tarifi bulunamadı"),);
+          return const ErrorView("Elinizdeki malzemelere uygun bir yemek tarifi bulunamadı");
         }
         return ListView.builder(
           itemCount: recommendedRecipes.length, itemBuilder: (BuildContext context, int index) {
             Recipe recipe = recommendedRecipes[index];
-            return Card(
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.2.h),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.orange.shade200, width: 0.8),
+                borderRadius: BorderRadius.circular(12)
+              ),
               child: ListTile(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                tileColor: Colors.grey.shade900,
                 onTap: ()=> goToRecipeDetailPage(context, recipe),
-                leading: Image.network(recipe.recipeImage),
-                title: Text(recipe.recipeName),
-                subtitle: Text("Hazırlama süresi: ${recipe.prepTime}\nPişirme süresi: ${recipe.cookTime}"),
+                leading: Card(clipBehavior: Clip.antiAlias,child: Image.network(recipe.recipeImage)),
+                title: Text(recipe.recipeName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.6.sp, color: Colors.white),),
+                subtitle: Padding(
+                  padding: EdgeInsets.only(top: 0.4.h),
+                  child: Text("Hazırlama süresi: ${recipe.prepTime}\nPişirme süresi: ${recipe.cookTime}", style: TextStyle(color: Colors.grey.shade400, fontSize: 13.4.sp),),
+                ),
                 trailing: Column(
                   children: [
-                    Text(recipe.servingSize),
-                    Text("%${recipe.matchPercentage.round()} Eşleşme")
+                    Text(recipe.servingSize, style: TextStyle(color: Colors.white, fontSize: 14.sp),),
+                    Text("%${recipe.matchPercentage.round()} Eşleşme", style: TextStyle(color: kOrangeColor, fontSize: 14.sp),)
                   ],
                 ),
               ),

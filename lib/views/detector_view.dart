@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:snapncook/providers/detector_provider.dart';
 import 'package:snapncook/providers/ingredient_list_provider.dart';
+import 'package:snapncook/utils/constants.dart';
 import 'package:snapncook/views/detected_ingredients_view.dart';
 import 'package:ultralytics_yolo/camera_preview/camera_preview.dart';
 import 'package:ultralytics_yolo/predict/detect/detect.dart';
@@ -20,6 +21,7 @@ class DetectorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kBackgroundColor,
       /*extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -83,7 +85,7 @@ class DetectorView extends StatelessWidget {
               final allPermissionsGranted = snapshot.data ?? false;
 
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                return Center(child: kProgressIcon);
               }
 
               if (allPermissionsGranted) {
@@ -96,7 +98,7 @@ class DetectorView extends StatelessWidget {
                 future: detectorProvider.initObjectDetectorWithLocalModel(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: kProgressIcon);
                   }
 
                   if (snapshot.hasError) {

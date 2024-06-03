@@ -13,6 +13,10 @@ class RecommendedRecipesProvider extends ChangeNotifier {
 
   Future<List<Recipe>> fetchRecommendedRecipes(List<Ingredient> ingredients) async {
 
+    if(recommendedRecipes.isNotEmpty){
+      return recommendedRecipes;
+    }
+    print("if çalışmadı");
     final List<String> ingredientLabels = ingredients.map((ingredient) => ingredient.label.toLowerCase()).toList(); //Get user ingredients to send cloud function
 
     HttpsCallableResult<dynamic> results = await dbService.fetchRecommendedRecipes(ingredientLabels); //Fetch data from cloud functions using user ingredients

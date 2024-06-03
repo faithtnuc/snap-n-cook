@@ -31,10 +31,24 @@ class DetectedIngredientsView extends StatelessWidget {
           floatingActionButton:
               context.watch<IngredientListProvider>().myIngredients.isNotEmpty
                   ? FloatingActionButton(
-                      child: const Icon(Icons.arrow_forward),
-                      onPressed: () => goToRecommendedRecipesView(context),
-                    )
-                  : const SizedBox.shrink(),
+                shape: RoundedRectangleBorder(
+                    side: BorderSide(width: 8.sp, color: Colors.white),
+                    borderRadius: BorderRadius.circular(20)),
+                onPressed: () => goToRecommendedRecipesView(context),
+                backgroundColor: Colors.black.withAlpha(60),
+                foregroundColor: Colors.white,
+                child: Icon(
+                  size: 24.sp,
+                  Icons.check_rounded,
+                  shadows: const [
+                    Shadow(
+                      blurRadius: 20.0,
+                      color: Colors.white,
+                      offset: Offset(0, 0),
+                    ),
+                  ],
+                ),
+              ) : const SizedBox.shrink(),
         ));
   }
 
@@ -71,7 +85,7 @@ class DetectedIngredientsView extends StatelessWidget {
         SvgPicture.asset(
             width: 20.w,
             height: 24.h,
-            assetName,
+            kEmptyFridgeSvg,
             semanticsLabel: 'Empty Fridge'),
         Padding(
           padding:
@@ -86,7 +100,7 @@ class DetectedIngredientsView extends StatelessWidget {
           customBorder: const CircleBorder(),
             onTap: () => showIngredientSelectionDialog(context),
             child: Container(
-              padding: EdgeInsets.all(8.sp),
+              padding: EdgeInsets.symmetric(vertical: 8.sp, horizontal: 12.sp),
               decoration: kEmptyListBoxDecoration,
               child: Text("Malzeme Ekle", style: kPrimaryButtonTextStyle,
             ),),)

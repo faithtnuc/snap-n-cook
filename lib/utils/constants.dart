@@ -8,6 +8,7 @@ const kSecondaryTextColor = Colors.black;
 final kPrimaryTextStyle = TextStyle(color: kPrimaryTextColor, fontSize: 14.6.sp);
 final kSecondaryTextStyle = TextStyle(color: kSecondaryTextColor, fontSize: 14.6.sp);
 final kPrimaryButtonTextStyle = TextStyle(color: kSecondaryTextColor, fontSize: 16.sp);
+final kPrimaryAppBarTextStyle = TextStyle(color: kOrangeColor);
 final kOrangeColor = Colors.orange.shade300;
 const kAppBarTitleStyle = TextStyle(color: kPrimaryTextColor);
 final kProgressIcon = SizedBox(
@@ -22,5 +23,9 @@ final kMyIngredientsDecoration = BoxDecoration(
   border: Border.all(color: Colors.grey.shade600, width: 0.6),
   borderRadius: BorderRadius.circular(8),
 );
-const assetName = 'assets/images/empty_fridge.svg';
+const kEmptyFridgeSvg = 'assets/images/empty_fridge.svg';
+const kSadCarrotSvg = 'assets/images/sad_carrot.svg';
 final kEmptyListBoxDecoration = BoxDecoration(color: Colors.orangeAccent, borderRadius: BorderRadius.circular(20));
+
+//reccomended recipes view
+final kCenterBodyTextStyle = TextStyle(color: kOrangeColor, fontSize: 17.6.sp);
