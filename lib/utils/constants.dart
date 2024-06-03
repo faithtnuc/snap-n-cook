@@ -33,3 +33,6 @@ final kTileTitleTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 14.
 final kTileSubtitleTextStyle = TextStyle(color: Colors.grey.shade400, fontSize: 13.4.sp);
 final kTileTrailingPrimaryTextStyle = TextStyle(color: kPrimaryTextColor, fontSize: 14.sp);
 final kTileTrailingSecondaryTextStyle = TextStyle(color: kOrangeColor, fontSize: 14.sp);
+
+//recipe detail view
+final kRecipeDetailTitleTextStyle = TextStyle(color: kOrangeColor);
