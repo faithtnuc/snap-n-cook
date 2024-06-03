@@ -48,25 +48,25 @@ class RecommendedRecipesView extends StatelessWidget {
           itemCount: recommendedRecipes.length, itemBuilder: (BuildContext context, int index) {
             Recipe recipe = recommendedRecipes[index];
             return Container(
-              margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.2.h),
+              margin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.4.h),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.orange.shade200, width: 0.8),
+                border: Border.all(color: index %2 == 0 ? kOrangeColor : Colors.grey.shade700, width: 0.4),
                 borderRadius: BorderRadius.circular(12)
               ),
               child: ListTile(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                tileColor: Colors.grey.shade900,
+                tileColor: kSecondaryBackgroundColor,
                 onTap: ()=> goToRecipeDetailPage(context, recipe),
                 leading: Card(clipBehavior: Clip.antiAlias,child: Image.network(recipe.recipeImage)),
-                title: Text(recipe.recipeName, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14.6.sp, color: Colors.white),),
+                title: Text(recipe.recipeName, style: kTileTitleTextStyle,),
                 subtitle: Padding(
                   padding: EdgeInsets.only(top: 0.4.h),
-                  child: Text("Hazırlama süresi: ${recipe.prepTime}\nPişirme süresi: ${recipe.cookTime}", style: TextStyle(color: Colors.grey.shade400, fontSize: 13.4.sp),),
+                  child: Text("Hazırlama süresi: ${recipe.prepTime}\nPişirme süresi: ${recipe.cookTime}", style: kTileSubtitleTextStyle,),
                 ),
                 trailing: Column(
                   children: [
-                    Text(recipe.servingSize, style: TextStyle(color: Colors.white, fontSize: 14.sp),),
-                    Text("%${recipe.matchPercentage.round()} Eşleşme", style: TextStyle(color: kOrangeColor, fontSize: 14.sp),)
+                    Text(recipe.servingSize, style: kTileTrailingPrimaryTextStyle,),
+                    Text("%${recipe.matchPercentage.round()} Eşleşme", style: kTileTrailingSecondaryTextStyle,)
                   ],
                 ),
               ),

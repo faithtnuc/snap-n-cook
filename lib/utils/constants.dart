@@ -29,3 +29,7 @@ final kEmptyListBoxDecoration = BoxDecoration(color: Colors.orangeAccent, border
 
 //reccomended recipes view
 final kCenterBodyTextStyle = TextStyle(color: kOrangeColor, fontSize: 17.6.sp);
+final kTileTitleTextStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 14.6.sp, color: kPrimaryTextColor);
+final kTileSubtitleTextStyle = TextStyle(color: Colors.grey.shade400, fontSize: 13.4.sp);
+final kTileTrailingPrimaryTextStyle = TextStyle(color: kPrimaryTextColor, fontSize: 14.sp);
+final kTileTrailingSecondaryTextStyle = TextStyle(color: kOrangeColor, fontSize: 14.sp);
